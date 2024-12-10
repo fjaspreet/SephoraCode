@@ -13,7 +13,6 @@ namespace sephoraMsystem
         public int Id { get; set; }
         public string Name { get; set; }
         public string Email { get; set; }
-        
 
         public Customer(int id, string name, string email)
         {
@@ -21,6 +20,7 @@ namespace sephoraMsystem
             Name = name;
             Email = email;
         }
+
         // Static method to add a new customer
         public static void AddCustomer(List<Customer> customers)
         {
@@ -33,7 +33,6 @@ namespace sephoraMsystem
                 Console.Write("Enter Customer ID (5 digits): ");
                 string input = Console.ReadLine();
 
-                // Check if input is 5 digits
                 if (input.Length == 5 && int.TryParse(input, out id))
                 {
                     break; // Exit the loop if it's a valid 5-digit integer
@@ -44,8 +43,21 @@ namespace sephoraMsystem
                 }
             }
 
-            Console.Write("Enter Customer Name: ");
-            string name = Console.ReadLine();
+            // Validate Customer Name to ensure it contains only alphabets
+            string name;
+            while (true)
+            {
+                Console.Write("Enter Customer Name: ");
+                name = Console.ReadLine();
+                if (IsValidName(name))
+                {
+                    break; // Exit the loop if the name is valid
+                }
+                else
+                {
+                    Console.WriteLine("Invalid Name. Please enter a name with only alphabets.");
+                }
+            }
 
             // Validate Email
             string email;
@@ -68,6 +80,18 @@ namespace sephoraMsystem
             Console.WriteLine("Customer added successfully.");
         }
 
+        // Name validation method
+        private static bool IsValidName(string name)
+        {
+            if (string.IsNullOrWhiteSpace(name))
+            {
+                return false;
+            }
+
+            // Check if the name contains only alphabets
+            return Regex.IsMatch(name, @"^[a-zA-Z\s]+$");
+        }
+
         // Email validation method
         private static bool IsValidEmail(string email)
         {
@@ -77,7 +101,7 @@ namespace sephoraMsystem
             }
 
             // Basic format validation using Regex
-            string emailPattern = @"^[^@\s]+@[^@\s]+\.[^@\s]+$";
+            string emailPattern = @"^[a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9-]+\.[a-zA-Z]{2,}$";
             if (!Regex.IsMatch(email, emailPattern, RegexOptions.IgnoreCase))
             {
                 return false;
@@ -96,3 +120,4 @@ namespace sephoraMsystem
         }
     }
 }
+
